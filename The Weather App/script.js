@@ -12,8 +12,8 @@ searchButton.addEventListener('click', () =>{
     fetch('http://api.openweathermap.org/data/2.5/forecast?q=' + cityName + '&appid=' + Data.key)
         .then(response => response.json())
         .then(data => {
-            timeRequest.innerHTML = data.list[0].dt_txt;
-            actualTemp.innerHTML = data.list[0].main.temp - 273.15;
+            timeRequest.innerHTML = data.list[0][1][2][3][4].dt_txt;
+            actualTemp.innerHTML = data.list[0][1][2][3][4].main.temp - 273.15;
         });
 })
 
