@@ -2,19 +2,30 @@ import Data from './config.js';
 
 const searchBar = document.getElementById('searchBar');
 const searchButton = document.getElementById('submitButton');
-const timeRequest = document.getElementById('time');
-const actualTemp = document.getElementById('temp')
+const section = document.getElementsByTagName('section')[0];
 
-searchButton.addEventListener('click', () =>{
+searchButton.addEventListener('click', () => {
     let cityName = searchBar.value.toLowerCase();
-    console.log(cityName);
 
     fetch('http://api.openweathermap.org/data/2.5/forecast?q=' + cityName + '&appid=' + Data.key)
         .then(response => response.json())
         .then(data => {
-            timeRequest.innerHTML = data.list[0][1][2][3][4].dt_txt;
-            actualTemp.innerHTML = data.list[0][1][2][3][4].main.temp - 273.15;
-        });
+            console.log(data);
+            for (let i = 0; i < 8; i++) {
+                const differentTime = document.createElement('p');
+                differentTime.innerHTML = data.list[i].dt_txt;
+                section.appendChild(differentTime);
+                const differentTemp = document.createElement('p');
+                section.appendChild(differentTemp);
+                differentTemp.innerHTML = Math.round(data.list[i].main.temp - 273.15);
+            }
+            for (let i = 8; i < 16; i++) {
+                const differentTime = document.createElement('p');
+                differentTime.innerHTML = data.list[i].dt_txt;
+                section.appendChild(differentTime);
+                const differentTemp = document.createElement('p');
+                section.appendChild(differentTemp);
+                differentTemp.innerHTML = Math.round(data.list[i].main.temp - 273.15);
+            }
+        })
 })
-
-
