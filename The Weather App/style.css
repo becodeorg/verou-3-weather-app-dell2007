@@ -13,3 +13,11 @@ body {
     max-width: 100vw;
     max-height: auto;
 }
+
+.card {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+#carouselExampleIndicators {
+    display: none;
+}
