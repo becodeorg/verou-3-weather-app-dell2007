@@ -1,4 +1,5 @@
 import Data from './config.js';
+import * as MyFn from './chart.js'; //Chart import from other JS file
 
 const searchBar = document.getElementById('searchBar');
 const searchButton = document.getElementById('submitButton');
@@ -7,11 +8,9 @@ const carouselControl = document.getElementById('carouselExampleIndicators');
 const dailyCarousel = document.getElementById('carousel');
 
 //Event to search by enter or click button
-searchButton.addEventListener('click',  search);
-
+searchButton.addEventListener('click', search);
 window.addEventListener('keydown', event => {
     if (event.key === 'Enter') {
-
         search();
     }
 });
@@ -47,13 +46,13 @@ function search() {
                     todayForecast.appendChild(actualForecast);
 
                     const Forecast = document.createElement('article');
-                    Forecast.classList.add('card', 'bg-transparent', 'border-success');
+                    Forecast.classList.add('card');
                     actualForecast.appendChild(Forecast);
 
-                    const actualTime = document.createElement('p');
-                    actualTime.setAttribute('id', 'timeNow');
-                    actualTime.innerHTML = new Date(data.daily[0].dt * 1000).toDateString();
-                    Forecast.appendChild(actualTime);
+                    const actualDate = document.createElement('p');
+                    actualDate.setAttribute('id', 'actualDate');
+                    actualDate.innerHTML = new Date(data.daily[0].dt * 1000).toDateString();
+                    Forecast.appendChild(actualDate);
                     Forecast.appendChild(city);
 
                     const actualTemp = document.createElement('h3');
@@ -63,6 +62,17 @@ function search() {
                     const actualIcon = document.createElement('img');
                     actualIcon.src = 'http://openweathermap.org/img/wn/' + data.current.weather[0].icon + '@2x.png';
                     actualTemp.appendChild(actualIcon);
+
+                    const extraInfo = document.createElement('p');
+                    extraInfo.innerHTML = 'Feel like ' + Math.round(data.current.feels_like) + '°C, ' + data.current.weather[0].description;
+                    Forecast.appendChild(extraInfo);
+
+                    //Chart
+                    const canvas = document.createElement('canvas');
+                    canvas.setAttribute('id', 'myChart');
+                    todayForecast.appendChild(canvas);
+                    MyFn.forecastChart();
+
 
                     //Loop forecast following 5 days
                     const firstForecast = document.createElement('article');

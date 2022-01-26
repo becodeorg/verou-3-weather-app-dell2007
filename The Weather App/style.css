@@ -10,12 +10,28 @@ body {
 }
 
 .container {
-    max-width: 100vw;
+    max-width: 80%;
     max-height: auto;
+    text-align: center;
 }
 
-.card {
-    background-color: rgba(0, 0, 0, 0.2);
+div.row {
+    margin: 5px;
+}
+
+article.card {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+}
+
+.carouselExampleIndicators {
+    /* max-width: 80vw; */
+}
+
+article.carousel-item {
+    padding: 30px;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
 }
 
 #carouselExampleIndicators {
