@@ -3,17 +3,20 @@ import Data from './config.js';
 const searchBar = document.getElementById('searchBar');
 const searchButton = document.getElementById('submitButton');
 const todayForecast = document.getElementById('todayForecast');
-const forecast = document.getElementById('forecast');
+const dailyCarousel = document.getElementById('carousel');
 
 //Event to search by enter or click button
 searchButton.addEventListener('click', search);
 window.addEventListener('keydown', event => {
     if (event.key === 'Enter') {
+        
         search();
     }
 });
 
 function search() {
+    todayForecast.innerHTML = " "; //Remove information when search again
+    dailyCarousel.innerHTML = " ";
     let cityName = searchBar.value.toLowerCase();
 
     //API link to search by city name
@@ -36,30 +39,73 @@ function search() {
                     console.log(data);
 
                     //Today forecast information
+                    const actualForecast = document.createElement('div');
+                    actualForecast.classList.add('row');
+                    todayForecast.appendChild(actualForecast);
+
+                    const Forecast = document.createElement('article');
+                    Forecast.classList.add('card', 'bg-transparent', 'border-success');
+                    actualForecast.appendChild(Forecast);
+
                     const actualTime = document.createElement('p');
                     actualTime.setAttribute('id', 'timeNow');
                     actualTime.innerHTML = new Date(data.daily[0].dt * 1000).toDateString();
-                    todayForecast.appendChild(actualTime);
-                    todayForecast.appendChild(city);
+                    Forecast.appendChild(actualTime);
+                    Forecast.appendChild(city);
+
                     const actualTemp = document.createElement('h3');
                     actualTemp.innerHTML = Math.round(data.current.temp) + '°C';
-                    todayForecast.appendChild(actualTemp);
+                    Forecast.appendChild(actualTemp);
+
                     const actualIcon = document.createElement('img');
                     actualIcon.src = 'http://openweathermap.org/img/wn/' + data.current.weather[0].icon + '@2x.png';
                     actualTemp.appendChild(actualIcon);
 
                     //Loop forecast following 5 days
-                    for (let i = 0; i < 5; i++) {
-                        const icon = document.createElement('img');
-                        icon.src = 'http://openweathermap.org/img/wn/' + data.daily[i].weather[0].icon + '@2x.png';
-                        forecast.appendChild(icon);
+                    const firstForecast = document.createElement('article');
+                    firstForecast.classList.add('carousel-item', 'active');
+                    dailyCarousel.appendChild(firstForecast);
+
+                    const icon = document.createElement('img');
+                    icon.src = 'http://openweathermap.org/img/wn/' + data.daily[0].weather[0].icon + '@2x.png';
+                    firstForecast.appendChild(icon);
+                    
+                    const firstDay = document.createElement('p');
+                    firstForecast.appendChild(firstDay);
+                    firstDay.innerHTML = new Date(data.daily[0].dt * 1000).toDateString();
+                    
+                    const firstTemp = document.createElement('p');
+                    firstForecast.appendChild(firstTemp);
+                    firstTemp.innerHTML = 'Max temperature ' + Math.round(data.daily[0].temp.max) + '°C & Min temperature ' + Math.round(data.daily[0].temp.min) + '°C';
+
+                    for (let i = 1; i < 5; i++) {
+                        const dailyForecast = document.createElement('article');
+                        dailyForecast.classList.add('carousel-item');
+                        dailyCarousel.appendChild(dailyForecast);
+                        
+                        const dailyIcon = document.createElement('img');
+                        dailyIcon.src = 'http://openweathermap.org/img/wn/' + data.daily[i].weather[0].icon + '@2x.png';
+                        dailyForecast.appendChild(dailyIcon);
+                        
                         const differentDay = document.createElement('p');
                         differentDay.innerHTML = new Date(data.daily[i].dt * 1000).toDateString();
-                        forecast.appendChild(differentDay);
+                        dailyForecast.appendChild(differentDay);
+                        
                         const dailyTemp = document.createElement('p');
-                        forecast.appendChild(dailyTemp);
-                        dailyTemp.innerHTML = 'Max temperature ' + Math.round(data.daily[i].temp.max) + '°C & Min temperature ' + Math.round(data.daily[i].temp.min) + '°C';
+                        dailyForecast.appendChild(dailyTemp);
+                        dailyTemp.innerHTML = 'Max temperature ' + Math.round(data.daily[0].temp.max) + '°C & Min temperature ' + Math.round(data.daily[0].temp.min) + '°C';
                     }
                 })
         })
 }
+
+//     const icon = document.createElement('img');
+//     icon.src = 'http://openweathermap.org/img/wn/' + data.daily[i].weather[0].icon + '@2x.png';
+//     forecast.appendChild(icon);
+//     const differentDay = document.createElement('p');
+//     differentDay.innerHTML = new Date(data.daily[i].dt * 1000).toDateString();
+//     forecast.appendChild(differentDay);
+//     const dailyTemp = document.createElement('p');
+//     forecast.appendChild(dailyTemp);
+//     dailyTemp.innerHTML = 'Max temperature ' + Math.round(data.daily[i].temp.max) + '°C & Min temperature ' + Math.round(data.daily[i].temp.min) + '°C';
+// }    
