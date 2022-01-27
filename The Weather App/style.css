@@ -24,8 +24,8 @@ article.card {
     color: white;
 }
 
-.carouselExampleIndicators {
-    /* max-width: 80vw; */
+#carouselExampleIndicators {
+    margin: 5px;
 }
 
 article.carousel-item {
@@ -36,4 +36,9 @@ article.carousel-item {
 
 #carouselExampleIndicators {
     display: none;
+}
+
+#myChart {
+    background-color: rgba(0, 0, 0, 0.5);
+    margin: 5px;
 }

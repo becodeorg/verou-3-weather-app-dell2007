@@ -25,6 +25,7 @@ function search() {
     fetch('http://api.openweathermap.org/data/2.5/forecast?q=' + cityName + '&units=metric&appid=' + Data.key)
         .then(response => response.json())
         .then(result => {
+            console.log(result);
             //Latitude & longitude for the second API
             const lat = result.city.coord.lat;
             const lon = result.city.coord.lon;
@@ -73,14 +74,19 @@ function search() {
                     canvas.setAttribute('role', 'img');
                     todayForecast.appendChild(canvas);
 
-                    let hourlyForecast = [];
+                    const timeStamp = [];
+                    for (let t = 0; t < 24; t++ ) {
+                    const localTime = data.hourly[t].dt + data.timezone_offset;
+                    const h = new Date(localTime * 1000).getHours();
+                    const d = new Date(localTime * 1000).toDateString(); 
+                    timeStamp.push(h +'H - ' + d);
+                    }
+
+                    const hourlyForecast = [];
                     for (let x = 0; x < 24; x++) {
                         hourlyForecast.push(Math.round(data.hourly[x].temp));
                     }
-                    console.log(hourlyForecast);
-
-                    MyFn.forecastChart(hourlyForecast); //Export from third JS file
-
+                    MyFn.forecastChart(hourlyForecast, timeStamp, ); //Export from third JS file
 
                     //Loop forecast following 5 days
                     const firstForecast = document.createElement('article');
