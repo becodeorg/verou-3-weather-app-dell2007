@@ -70,8 +70,16 @@ function search() {
                     //Chart
                     const canvas = document.createElement('canvas');
                     canvas.setAttribute('id', 'myChart');
+                    canvas.setAttribute('role', 'img');
                     todayForecast.appendChild(canvas);
-                    MyFn.forecastChart();
+
+                    let hourlyForecast = [];
+                    for (let x = 0; x < 24; x++) {
+                        hourlyForecast.push(Math.round(data.hourly[x].temp));
+                    }
+                    console.log(hourlyForecast);
+
+                    MyFn.forecastChart(hourlyForecast); //Export from third JS file
 
 
                     //Loop forecast following 5 days
@@ -106,7 +114,7 @@ function search() {
 
                         const dailyTemp = document.createElement('p');
                         dailyForecast.appendChild(dailyTemp);
-                        dailyTemp.innerHTML = 'Max Temp: ' + Math.round(data.daily[0].temp.max) + '°C & Min Temp; ' + Math.round(data.daily[0].temp.min) + '°C';
+                        dailyTemp.innerHTML = 'Max Temp: ' + Math.round(data.daily[i].temp.max) + '°C & Min Temp; ' + Math.round(data.daily[i].temp.min) + '°C';
                     }
                 })
         })
