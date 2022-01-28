@@ -6,6 +6,7 @@ const searchButton = document.getElementById('submitButton');
 const todayForecast = document.getElementById('todayForecast');
 const carouselControl = document.getElementById('carouselExampleIndicators');
 const dailyCarousel = document.getElementById('carousel');
+const changeBackg = document.getElementsByTagName('body');
 
 //Event to search by enter or click button
 searchButton.addEventListener('click', search);
@@ -15,11 +16,12 @@ window.addEventListener('keydown', event => {
     }
 });
 
-function search() {
+function search(changingBack) {
     carouselControl.style.display = 'block';
     todayForecast.innerHTML = " "; //Remove information when search again
     dailyCarousel.innerHTML = " ";
     let cityName = searchBar.value.toLowerCase();
+
 
     //API link to search by city name
     fetch('http://api.openweathermap.org/data/2.5/forecast?q=' + cityName + '&units=metric&appid=' + Data.key)
@@ -86,7 +88,15 @@ function search() {
                     for (let x = 0; x < 24; x++) {
                         hourlyForecast.push(Math.round(data.hourly[x].temp));
                     }
-                    MyFn.forecastChart(hourlyForecast, timeStamp, ); //Export from third JS file
+
+                    const xTime = [];
+                    for (let k = 0; k < 24; k++ ) {
+                        const timeX = new Date((data.hourly[k].dt + data.timezone_offset) * 1000).getHours();
+                        xTime.push(timeX + 'H');
+                    }
+                    console.log(xTime);
+
+                    MyFn.forecastChart(hourlyForecast, timeStamp, xTime); //Export from third JS file
 
                     //Loop forecast following 5 days
                     const firstForecast = document.createElement('article');

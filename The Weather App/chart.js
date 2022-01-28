@@ -1,4 +1,4 @@
-export function forecastChart(hourlyForecast, timeStamp) {
+export function forecastChart(hourlyForecast, timeStamp, xTime) {
     const newChart = document.getElementById('myChart').getContext('2d');
     const myChart = new Chart(newChart, {
         type: 'line',
@@ -16,10 +16,10 @@ export function forecastChart(hourlyForecast, timeStamp) {
         options: {
             scales: {
                 x: {
+                    type: 'category',
+                    labels: xTime,
                     ticks: {
-                        color: 'white', 
-                        callback: function(value, index, ticks) {
-                            return value;}
+                        color: 'white'
                     }
                 },
                 y: {

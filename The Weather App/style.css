@@ -42,3 +42,15 @@ article.carousel-item {
     background-color: rgba(0, 0, 0, 0.5);
     margin: 5px;
 }
+
+@media only screen and (min-width: 768px) {
+    .container {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .insideSection {
+        display: grid;
+    }
+
+}
