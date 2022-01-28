@@ -22,9 +22,16 @@ function search(changingBack) {
     dailyCarousel.innerHTML = " ";
     let cityName = searchBar.value.toLowerCase();
 
+    //API link from Unsplash
+    fetch("https://api.unsplash.com/search/photos?query=" + cityName + "&client_id=" + Data.UNSPLASH_API_KEY)
+        .then(response => response.json())
+        .then(image =>{
+            console.log(image);
+            //Change background as per the city name
+            document.body.style.backgroundImage = 'url(' + image.results[0].urls.full + ')';
 
-    //API link to search by city name
-    fetch('http://api.openweathermap.org/data/2.5/forecast?q=' + cityName + '&units=metric&appid=' + Data.key)
+        //API link to search by city name
+        fetch('http://api.openweathermap.org/data/2.5/forecast?q=' + cityName + '&units=metric&appid=' + Data.key)
         .then(response => response.json())
         .then(result => {
             console.log(result);
@@ -77,11 +84,11 @@ function search(changingBack) {
                     todayForecast.appendChild(canvas);
 
                     const timeStamp = [];
-                    for (let t = 0; t < 24; t++ ) {
-                    const localTime = data.hourly[t].dt + data.timezone_offset;
-                    const h = new Date(localTime * 1000).getHours();
-                    const d = new Date(localTime * 1000).toDateString(); 
-                    timeStamp.push(h +'H - ' + d);
+                    for (let t = 0; t < 24; t++) {
+                        const localTime = data.hourly[t].dt + data.timezone_offset;
+                        const h = new Date(localTime * 1000).getHours();
+                        const d = new Date(localTime * 1000).toDateString();
+                        timeStamp.push(h + 'H - ' + d);
                     }
 
                     const hourlyForecast = [];
@@ -90,7 +97,7 @@ function search(changingBack) {
                     }
 
                     const xTime = [];
-                    for (let k = 0; k < 24; k++ ) {
+                    for (let k = 0; k < 24; k++) {
                         const timeX = new Date((data.hourly[k].dt + data.timezone_offset) * 1000).getHours();
                         xTime.push(timeX + 'H');
                     }
@@ -134,4 +141,5 @@ function search(changingBack) {
                     }
                 })
         })
-}
+    })
+    }
