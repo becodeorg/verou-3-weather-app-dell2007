@@ -6,7 +6,6 @@ const searchButton = document.getElementById('submitButton');
 const todayForecast = document.getElementById('todayForecast');
 const carouselControl = document.getElementById('carouselExampleIndicators');
 const dailyCarousel = document.getElementById('carousel');
-const changeBackg = document.getElementsByTagName('body');
 
 //Event to search by enter or click button
 searchButton.addEventListener('click', search);
@@ -28,7 +27,11 @@ function search(changingBack) {
         .then(image =>{
             console.log(image);
             //Change background as per the city name
-            document.body.style.backgroundImage = 'url(' + image.results[0].urls.full + ')';
+            // for (let img = 0; img < 10; img++) {
+                // const backImages = ; 
+                const randomImg = Math.floor(Math.random() * image.results.length);                
+                document.body.style.backgroundImage = 'url(' + image.results[randomImg].urls.full + ')';  
+            // }
 
         //API link to search by city name
         fetch('http://api.openweathermap.org/data/2.5/forecast?q=' + cityName + '&units=metric&appid=' + Data.key)
@@ -77,7 +80,7 @@ function search(changingBack) {
                     extraInfo.innerHTML = 'Feel like ' + Math.round(data.current.feels_like) + '°C, ' + data.current.weather[0].description;
                     Forecast.appendChild(extraInfo);
 
-                    //Chart
+                    //Chart data
                     const canvas = document.createElement('canvas');
                     canvas.setAttribute('id', 'myChart');
                     canvas.setAttribute('role', 'img');
@@ -101,7 +104,6 @@ function search(changingBack) {
                         const timeX = new Date((data.hourly[k].dt + data.timezone_offset) * 1000).getHours();
                         xTime.push(timeX + 'H');
                     }
-                    console.log(xTime);
 
                     MyFn.forecastChart(hourlyForecast, timeStamp, xTime); //Export from third JS file
 
