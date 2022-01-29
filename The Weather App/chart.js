@@ -18,6 +18,7 @@ export function forecastChart(hourlyForecast, timeStamp, xTime) {
                 x: {
                     type: 'category',
                     labels: xTime,
+                    position: 'top',
                     ticks: {
                         color: 'white'
                     }
