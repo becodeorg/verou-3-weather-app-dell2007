@@ -73,10 +73,11 @@ const fiveDaysForecast = (data) => {
 }
 
 const hourlyChart = (data) => {
+    const chartPerHour = document.getElementById('hourlyChart');
     const canvas = document.createElement('canvas');
     canvas.setAttribute('id', 'myChart');
     canvas.setAttribute('role', 'img');
-    todayForecast.appendChild(canvas);
+    chartPerHour.appendChild(canvas);
 
     const timeStamp = [];
     const xLabelTime = [];
