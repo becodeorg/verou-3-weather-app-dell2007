@@ -7,15 +7,7 @@ const todayForecast = document.getElementById('todayForecast');
 const carouselControl = document.getElementById('carouselExampleIndicators');
 const dailyCarousel = document.getElementById('carousel');
 
-//Search events
-searchButton.addEventListener('click', search);
-window.addEventListener('keydown', event => {
-    if (event.key === 'Enter') {
-        search();
-    }
-});
-
-function search() {
+const search = () => {
     carouselControl.style.display = 'block';
     todayForecast.innerHTML = " "; //Remove information when search again
     dailyCarousel.innerHTML = " ";
@@ -134,3 +126,12 @@ function search() {
                 })
         })
 }
+search;
+
+//Search events
+searchButton.addEventListener('click', search);
+window.addEventListener('keydown', event => {
+    if (event.key === 'Enter') {
+        search();
+    }
+});
