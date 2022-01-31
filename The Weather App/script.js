@@ -36,7 +36,7 @@ const forecastOfDay = (result, data) => {
     Forecast.appendChild(extraInfo);
 }
 
-const fiveDaysForecast = (result, data) => {
+const fiveDaysForecast = (data) => {
     const firstForecast = document.createElement('article');
     firstForecast.classList.add('carousel-item', 'active');
     dailyCarousel.appendChild(firstForecast);
@@ -72,6 +72,26 @@ const fiveDaysForecast = (result, data) => {
     }
 }
 
+const hourlyChart = (data) => {
+    const canvas = document.createElement('canvas');
+    canvas.setAttribute('id', 'myChart');
+    canvas.setAttribute('role', 'img');
+    todayForecast.appendChild(canvas);
+
+    const timeStamp = [];
+    const xLabelTime = [];
+    const hourlyForecast = [];
+    for (let t = 0; t < 24; t++) {
+        const localTime = data.hourly[t].dt + data.timezone_offset;
+        const h = new Date(localTime * 1000).getHours();
+        const d = new Date(localTime * 1000).toDateString();
+        timeStamp.push(h + 'H - ' + d);
+        xLabelTime.push(h + 'H');
+        hourlyForecast.push(Math.round(data.hourly[t].temp));
+    }
+    MyFn.forecastChart(hourlyForecast, timeStamp, xLabelTime); //Export from third JS file
+}
+
 const search = () => {
     const carouselControl = document.getElementById('carouselExampleIndicators');
     carouselControl.style.display = 'block';
@@ -104,31 +124,10 @@ const search = () => {
 
                             //Today forecast information
                             forecastOfDay(result, data);
-                            //Loop forecast following 5 days
-                            fiveDaysForecast(result, data);
-
+                            //Forecast following 5 days
+                            fiveDaysForecast(data);
                             //Chart data
-                            const canvas = document.createElement('canvas');
-                            canvas.setAttribute('id', 'myChart');
-                            canvas.setAttribute('role', 'img');
-                            todayForecast.appendChild(canvas);
-
-                            const timeStamp = [];
-                            const xLabelTime = [];
-                            const hourlyForecast = [];
-                            for (let t = 0; t < 24; t++) {
-                                const localTime = data.hourly[t].dt + data.timezone_offset;
-                                const h = new Date(localTime * 1000).getHours();
-                                const d = new Date(localTime * 1000).toDateString();
-                                timeStamp.push(h + 'H - ' + d);
-                                xLabelTime.push(h + 'H');
-                                hourlyForecast.push(Math.round(data.hourly[t].temp));
-                            }
-
-                            MyFn.forecastChart(hourlyForecast, timeStamp, xLabelTime); //Export from third JS file
-
-                            
-                            
+                            hourlyChart(data);
                         })
                 })
         })
