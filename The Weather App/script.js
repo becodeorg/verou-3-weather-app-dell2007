@@ -1,16 +1,14 @@
 import Data from './config.js';
 import * as MyFn from './chart.js'; //Chart import
 
-const searchBar = document.getElementById('searchBar');
-const searchButton = document.getElementById('submitButton');
-const todayForecast = document.getElementById('todayForecast');
-const carouselControl = document.getElementById('carouselExampleIndicators');
-const dailyCarousel = document.getElementById('carousel');
-
 const search = () => {
+    const carouselControl = document.getElementById('carouselExampleIndicators');
     carouselControl.style.display = 'block';
+    const todayForecast = document.getElementById('todayForecast');
     todayForecast.innerHTML = " "; //Remove information when search again
+    const dailyCarousel = document.getElementById('carousel');
     dailyCarousel.innerHTML = " ";
+    const searchBar = document.getElementById('searchBar');
     let cityName = searchBar.value.toLowerCase();
 
     //API link from Unsplash
@@ -129,6 +127,7 @@ const search = () => {
 search;
 
 //Search events
+const searchButton = document.getElementById('submitButton');
 searchButton.addEventListener('click', search);
 window.addEventListener('keydown', event => {
     if (event.key === 'Enter') {
