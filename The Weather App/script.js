@@ -84,17 +84,14 @@ function search() {
 
                             const timeStamp = [];
                             const xLabelTime = [];
+                            const hourlyForecast = [];
                             for (let t = 0; t < 24; t++) {
                                 const localTime = data.hourly[t].dt + data.timezone_offset;
                                 const h = new Date(localTime * 1000).getHours();
                                 const d = new Date(localTime * 1000).toDateString();
                                 timeStamp.push(h + 'H - ' + d);
                                 xLabelTime.push(h + 'H');
-                            }
-
-                            const hourlyForecast = [];
-                            for (let x = 0; x < 24; x++) {
-                                hourlyForecast.push(Math.round(data.hourly[x].temp));
+                                hourlyForecast.push(Math.round(data.hourly[t].temp));
                             }
 
                             MyFn.forecastChart(hourlyForecast, timeStamp, xLabelTime); //Export from third JS file
