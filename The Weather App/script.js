@@ -1,13 +1,45 @@
 import Data from './config.js';
 import * as MyFn from './chart.js'; //Chart import
 
+const todayForecast = document.getElementById('todayForecast');
+const dailyCarousel = document.getElementById('carousel');
+
+const forecastOfDay = (result, data) =>{
+    const actualForecast = document.createElement('div');
+    actualForecast.classList.add('row');
+    todayForecast.appendChild(actualForecast);
+
+    const Forecast = document.createElement('article');
+    Forecast.classList.add('card');
+    actualForecast.appendChild(Forecast);
+
+    const actualDate = document.createElement('p');
+    actualDate.setAttribute('id', 'actualDate');
+    actualDate.innerHTML = new Date(data.daily[0].dt * 1000).toDateString();
+    Forecast.appendChild(actualDate);
+
+    const city = document.createElement('h3');
+    city.setAttribute('id', 'city');
+    city.innerHTML = result.city.name + ', ' + result.city.country;
+    Forecast.appendChild(city);
+
+    const actualTemp = document.createElement('h3');
+    actualTemp.innerHTML = Math.round(data.current.temp) + '°C';
+    Forecast.appendChild(actualTemp);
+
+    const actualIcon = document.createElement('img');
+    actualIcon.src = 'http://openweathermap.org/img/wn/' + data.current.weather[0].icon + '@2x.png';
+    actualTemp.appendChild(actualIcon);
+
+    const extraInfo = document.createElement('p');
+    extraInfo.innerHTML = 'Feel like ' + Math.round(data.current.feels_like) + '°C, ' + data.current.weather[0].description;
+    Forecast.appendChild(extraInfo);
+}
+
 const search = () => {
     const carouselControl = document.getElementById('carouselExampleIndicators');
     carouselControl.style.display = 'block';
-    const todayForecast = document.getElementById('todayForecast');
-    todayForecast.innerHTML = " "; //Remove information when search again
-    const dailyCarousel = document.getElementById('carousel');
-    dailyCarousel.innerHTML = " ";
+    todayForecast.innerHTML, dailyCarousel.innerHTML = " "; //Remove information when search again
     const searchBar = document.getElementById('searchBar');
     let cityName = searchBar.value.toLowerCase();
 
@@ -29,42 +61,13 @@ const search = () => {
                     const lat = result.city.coord.lat;
                     const lon = result.city.coord.lon;
 
-                    //City and country fetch from first weather API
-                    const city = document.createElement('h3');
-                    city.setAttribute('id', 'city');
-                    city.innerHTML = result.city.name + ', ' + result.city.country;
-
                     //API  to daily forecast
                     fetch('https://api.openweathermap.org/data/2.5/onecall?lat=' + lat + '&lon=' + lon + '&exclude=minutely,alert&units=metric&appid=' + Data.key)
                         .then(response => response.json())
                         .then(data => {
 
                             //Today forecast information
-                            const actualForecast = document.createElement('div');
-                            actualForecast.classList.add('row');
-                            todayForecast.appendChild(actualForecast);
-
-                            const Forecast = document.createElement('article');
-                            Forecast.classList.add('card');
-                            actualForecast.appendChild(Forecast);
-
-                            const actualDate = document.createElement('p');
-                            actualDate.setAttribute('id', 'actualDate');
-                            actualDate.innerHTML = new Date(data.daily[0].dt * 1000).toDateString();
-                            Forecast.appendChild(actualDate);
-                            Forecast.appendChild(city);
-
-                            const actualTemp = document.createElement('h3');
-                            actualTemp.innerHTML = Math.round(data.current.temp) + '°C';
-                            Forecast.appendChild(actualTemp);
-
-                            const actualIcon = document.createElement('img');
-                            actualIcon.src = 'http://openweathermap.org/img/wn/' + data.current.weather[0].icon + '@2x.png';
-                            actualTemp.appendChild(actualIcon);
-
-                            const extraInfo = document.createElement('p');
-                            extraInfo.innerHTML = 'Feel like ' + Math.round(data.current.feels_like) + '°C, ' + data.current.weather[0].description;
-                            Forecast.appendChild(extraInfo);
+                            forecastOfDay(result, data);
 
                             //Chart data
                             const canvas = document.createElement('canvas');
