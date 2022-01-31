@@ -3,6 +3,7 @@ import * as MyFn from './chart.js'; //Chart import
 
 const todayForecast = document.getElementById('todayForecast');
 const dailyCarousel = document.getElementById('carousel');
+const chartPerHour = document.getElementById('hourlyChart');
 
 const forecastOfDay = (result, data) => {
     const actualForecast = document.createElement('div');
@@ -73,7 +74,6 @@ const fiveDaysForecast = (data) => {
 }
 
 const hourlyChart = (data) => {
-    const chartPerHour = document.getElementById('hourlyChart');
     const canvas = document.createElement('canvas');
     canvas.setAttribute('id', 'myChart');
     canvas.setAttribute('role', 'img');
@@ -90,15 +90,19 @@ const hourlyChart = (data) => {
         xLabelTime.push(h + 'H');
         hourlyForecast.push(Math.round(data.hourly[t].temp));
     }
+
     MyFn.forecastChart(hourlyForecast, timeStamp, xLabelTime); //Export from third JS file
 }
 
 const search = () => {
     const carouselControl = document.getElementById('carouselExampleIndicators');
     carouselControl.style.display = 'block';
-    todayForecast.innerHTML, dailyCarousel.innerHTML = " "; //Remove information when search again
+    todayForecast.innerHTML = " ";
+    dailyCarousel.innerHTML = " "; //Remove information when search again
+    chartPerHour.innerHTML = " ";
     const searchBar = document.getElementById('searchBar');
     let cityName = searchBar.value.toLowerCase();
+    
 
     //API link from Unsplash
     fetch("https://api.unsplash.com/search/photos?query=" + cityName + "&client_id=" + Data.UNSPLASH_API_KEY)
@@ -122,12 +126,8 @@ const search = () => {
                     fetch('https://api.openweathermap.org/data/2.5/onecall?lat=' + lat + '&lon=' + lon + '&exclude=minutely,alert&units=metric&appid=' + Data.key)
                         .then(response => response.json())
                         .then(data => {
-
-                            //Today forecast information
                             forecastOfDay(result, data);
-                            //Forecast following 5 days
                             fiveDaysForecast(data);
-                            //Chart data
                             hourlyChart(data);
                         })
                 })

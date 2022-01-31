@@ -54,8 +54,26 @@ article.carousel-item {
         flex-direction: column;
     }
 
-    .insideSection {
-        display: grid;
+    #topSection {
+        display: flex;
+        flex-direction: row;
+    }
+
+    #todayForecast {
+        width: 50%;
+    }
+
+    .card {
+        height: 50%;
+    }
+
+    article.carousel-item {
+        padding: 26px;
+        border-radius: 5px;
+    }
+
+    #carouselExampleIndicators {
+        width: 50%;
     }
 
 }
