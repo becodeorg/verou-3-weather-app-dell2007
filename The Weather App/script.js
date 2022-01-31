@@ -15,7 +15,7 @@ window.addEventListener('keydown', event => {
     }
 });
 
-function search(changingBack) {
+function search() {
     carouselControl.style.display = 'block';
     todayForecast.innerHTML = " "; //Remove information when search again
     dailyCarousel.innerHTML = " ";
@@ -25,7 +25,6 @@ function search(changingBack) {
     fetch("https://api.unsplash.com/search/photos?query=" + cityName + "&client_id=" + Data.UNSPLASH_API_KEY)
         .then(response => response.json())
         .then(image => {
-            console.log(image);
 
             //Change background as per the city name
             const randomImg = Math.floor(Math.random() * image.results.length);
@@ -35,7 +34,6 @@ function search(changingBack) {
             fetch('http://api.openweathermap.org/data/2.5/forecast?q=' + cityName + '&units=metric&appid=' + Data.key)
                 .then(response => response.json())
                 .then(result => {
-                    console.log(result);
 
                     //Latitude & longitude for the second API
                     const lat = result.city.coord.lat;
@@ -50,7 +48,6 @@ function search(changingBack) {
                     fetch('https://api.openweathermap.org/data/2.5/onecall?lat=' + lat + '&lon=' + lon + '&exclude=minutely,alert&units=metric&appid=' + Data.key)
                         .then(response => response.json())
                         .then(data => {
-                            console.log(data);
 
                             //Today forecast information
                             const actualForecast = document.createElement('div');
@@ -86,11 +83,13 @@ function search(changingBack) {
                             todayForecast.appendChild(canvas);
 
                             const timeStamp = [];
+                            const xLabelTime = [];
                             for (let t = 0; t < 24; t++) {
                                 const localTime = data.hourly[t].dt + data.timezone_offset;
                                 const h = new Date(localTime * 1000).getHours();
                                 const d = new Date(localTime * 1000).toDateString();
                                 timeStamp.push(h + 'H - ' + d);
+                                xLabelTime.push(h + 'H');
                             }
 
                             const hourlyForecast = [];
@@ -98,13 +97,7 @@ function search(changingBack) {
                                 hourlyForecast.push(Math.round(data.hourly[x].temp));
                             }
 
-                            const xTime = [];
-                            for (let k = 0; k < 24; k++) {
-                                const timeX = new Date((data.hourly[k].dt + data.timezone_offset) * 1000).getHours();
-                                xTime.push(timeX + 'H');
-                            }
-
-                            MyFn.forecastChart(hourlyForecast, timeStamp, xTime); //Export from third JS file
+                            MyFn.forecastChart(hourlyForecast, timeStamp, xLabelTime); //Export from third JS file
 
                             //Loop forecast following 5 days
                             const firstForecast = document.createElement('article');
